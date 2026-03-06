@@ -1,0 +1,82 @@
+---
+description: Архитектура Feature-Sliced Design (FSD) для организации кода
+alwaysApply: true
+---
+
+# Feature-Sliced Design (FSD)
+
+Проект использует архитектуру Feature-Sliced Design. Соблюдай её при создании и изменении кода.
+
+## Слои (Layers)
+
+Слои в порядке зависимостей (сверху вниз):
+
+1. **app** — точка входа, роутинг, провайдеры, глобальные стили
+2. **pages** — страницы приложения
+3. **widgets** — крупные самостоятельные блоки UI
+4. **features** — пользовательские сценарии (действия с бизнес-ценностью)
+5. **entities** — бизнес-сущности (User, Message, Chat и т.д.)
+6. **shared** — переиспользуемый код без бизнес-логики
+
+## Правило импортов
+
+Модуль может импортировать **только** из слоёв ниже:
+
+```
+// ✅ features может импортировать из entities и shared
+import { User } from '@/entities/user';
+import { Button } from '@/shared/ui/button';
+
+// ❌ Слой не может импортировать из слоёв выше
+// features НЕ может импортировать из widgets или pages
+```
+
+Сlices на одном слое не импортируют друг друга (кроме @x для entities).
+
+## Сегменты (Segments)
+
+Внутри slice/слоя используй:
+
+- `ui` — компоненты, стили
+- `model` — стейт, схемы, бизнес-логика
+- `api` — запросы к бэкенду
+- `lib` — вспомогательный код внутри slice
+- `config` — конфигурация
+
+## Public API
+
+Слои и slices экспортируют через `index.ts`:
+
+```typescript
+// ✅ Явный экспорт
+export { LoginForm } from './ui/LoginForm';
+export { useAuth } from './model/useAuth';
+
+// ❌ Исключить: export * from './ui'
+```
+
+Импорты — только через public API:
+
+```typescript
+// ✅ Через public API
+import { LoginForm } from '@/features/auth';
+
+// ❌ Импорт внутренних файлов
+// import { LoginForm } from '@/features/auth/ui/LoginForm';
+```
+
+## Структура src/
+
+```
+src/
+├── app/          # провайдеры, роутинг, стили
+├── pages/        # страницы
+├── widgets/      # виджеты
+├── features/     # фичи
+├── entities/     # сущности
+├── shared/       # ui, api, lib, config, types
+```
+
+## Алиасы
+
+Используй алиасы для импортов: `@/app`, `@/pages`, `@/widgets`, `@/features`, `@/entities`, `@/shared`.
