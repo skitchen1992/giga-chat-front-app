@@ -4,36 +4,53 @@ import { ArrowUpIcon, FileText, Loader2, Plus, X } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import selector from "./selector";
 import { addFile, clearFiles, removeFile } from "../../model/attachmentStore";
-import { addAttachment, clearAttachments, removeAttachment, resetMessage, sendMessage, setMessage } from "../../model/slice";
-import { useDropzone } from 'react-dropzone';
-import { cn } from '@/lib/utils';
-import { formatFileSize } from '@/shared/lib';
+import {
+  addAttachment,
+  clearAttachments,
+  removeAttachment,
+  resetMessage,
+  sendMessage,
+  setMessage,
+} from "../../model/slice";
+import { useDropzone } from "react-dropzone";
+import { cn } from "@/lib/utils";
+import { formatFileSize } from "@/shared/lib";
 
 function ChatInput() {
   const { message, attachments } = useAppSelector(selector);
   const dispatch = useAppDispatch();
 
-  const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject, open } = useDropzone({
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+    open,
+  } = useDropzone({
     onDrop: (acceptedFiles) => {
       acceptedFiles.forEach((file) => {
         const id = addFile(file);
         dispatch(addAttachment({ id, name: file.name, size: file.size }));
       });
     },
-    noClick: true,      // не открывать диалог по клику
-    noKeyboard: true,  // не открывать по клавише
+    noClick: true, // не открывать диалог по клику
+    noKeyboard: true, // не открывать по клавише
     accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.tiff', '.bmp'],
-      'text/plain': ['.txt'],
-      'application/pdf': ['.pdf'],
-      'application/msword': ['.doc'],
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-      'application/epub+zip': ['.epub'],
-      'application/vnd.ms-powerpoint': ['.ppt'],
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
+      "image/*": [".png", ".jpg", ".jpeg", ".gif", ".webp", ".tiff", ".bmp"],
+      "text/plain": [".txt"],
+      "application/pdf": [".pdf"],
+      "application/msword": [".doc"],
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+        [".docx"],
+      "application/epub+zip": [".epub"],
+      "application/vnd.ms-powerpoint": [".ppt"],
+      "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+        [".pptx"],
     },
     maxSize: 10 * 1024 * 1024, // 10 MB
   });
+
   const isLoading = false;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -94,14 +111,19 @@ function ChatInput() {
         </div>
       )}
       <div
-          className={cn(
-            "relative flex items-center rounded-xl border px-4 py-3 transition-colors",
-            isDragReject && "border-destructive bg-destructive/10",
-            isDragAccept && "border-primary bg-primary/10",
-            !isDragActive && "border-input bg-muted/30"
-          )}
+        className={cn(
+          "relative flex items-center rounded-xl border px-4 py-3 transition-colors",
+          isDragReject && "border-destructive bg-destructive/10",
+          isDragAccept && "border-primary bg-primary/10",
+          !isDragActive && "border-input bg-muted/30"
+        )}
+      >
+        <Button
+          variant={null}
+          size="icon-sm"
+          aria-label="Добавить"
+          onClick={open}
         >
-        <Button variant={null} size="icon-sm" aria-label="Добавить" onClick={open}>
           <Plus className="size-5 text-muted-foreground" />
         </Button>
         <input {...getInputProps()} />
