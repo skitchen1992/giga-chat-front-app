@@ -7,12 +7,7 @@ import { addFile, clearFiles, removeFile } from "../../model/attachmentStore";
 import { addAttachment, clearAttachments, removeAttachment, resetMessage, sendMessage, setMessage } from "../../model/slice";
 import { useDropzone } from 'react-dropzone';
 import { cn } from '@/lib/utils';
-
-function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} Б`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} КБ`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} МБ`;
-}
+import { formatFileSize } from '@/shared/lib';
 
 function ChatInput() {
   const { message, attachments } = useAppSelector(selector);
