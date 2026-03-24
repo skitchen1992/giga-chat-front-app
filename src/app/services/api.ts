@@ -1,7 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "@/app/store/store";
 import { selectTokenSelector } from "@/features/auth/model/selectors";
-import { gigaChatAuthorizationKey, gigaChatOauthScope } from "@/shared/config/env";
+import {
+  gigaChatAuthorizationKey,
+  gigaChatOauthScope,
+} from "@/shared/config/env";
 import { setToken } from "@/features/auth/model/slice";
 
 export interface AccessTokenResponse {
@@ -9,9 +12,36 @@ export interface AccessTokenResponse {
   expires_at: number;
 }
 
+export interface CompletionsResponse {
+  value: {
+    choices: [
+      {
+        message: {
+          content: string;
+          role: string;
+        };
+        index: number;
+        finish_reason: string;
+      },
+    ];
+    created: number;
+    model: string;
+    object: string;
+    usage: {
+      prompt_tokens: number;
+      completion_tokens: number;
+      total_tokens: number;
+      precached_prompt_tokens: number;
+    };
+  };
+}
+
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://gigachat.devices.sberbank.ru/api/v1",
+    baseUrl:
+      import.meta.env.DEV && typeof window !== "undefined"
+        ? `${window.location.origin}/api/v1`
+        : "https://gigachat.devices.sberbank.ru/api/v1",
     prepareHeaders: (headers, { getState, endpoint }) => {
       if (endpoint !== "getAuthToken") {
         const token = selectTokenSelector(getState() as RootState);
@@ -54,7 +84,24 @@ export const api = createApi({
         }
       },
     }),
+    getCompletions: build.mutation<CompletionsResponse, { prompt: string }>({
+      query: ({ prompt }) => ({
+        url: "/chat/completions",
+        method: "POST",
+        body: {
+          model: "GigaChat-2-Max",
+          messages: [
+            {
+              role: "user",
+              content: prompt,
+              // functions_state_id: "string",
+              // attachments: ["string"],
+            },
+          ],
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetAuthTokenMutation } = api;
+export const { useGetAuthTokenMutation, useGetCompletionsMutation } = api;

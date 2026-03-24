@@ -7,14 +7,16 @@ import { defineConfig } from "vite";
 
 export default defineConfig(() => ({
   plugins: [react(), tailwindcss()],
-  // В браузере прямой запрос к ngw.devices.sberbank.ru часто даёт ERR_CERT_AUTHORITY_INVALID
-  // (корпоративный MITM, VPN, отличия доверенных УЦ). Прокси: браузер → localhost, TLS к Сберу — в Node.
   server: {
     proxy: {
       "/api/v2/oauth": {
         target: "https://ngw.devices.sberbank.ru:9443",
         changeOrigin: true,
-        // Если и Node ругается на сертификат апстрима — оставьте false только для локальной разработки.
+        secure: false,
+      },
+      "/api/v1": {
+        target: "https://gigachat.devices.sberbank.ru",
+        changeOrigin: true,
         secure: false,
       },
     },

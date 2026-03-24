@@ -15,8 +15,10 @@ import {
 import { useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
 import { formatFileSize } from "@/shared/lib";
+import { useGetCompletionsMutation } from "@/app/services/api";
 
 function ChatInput() {
+  const [getCompletions] = useGetCompletionsMutation();
   const { message, attachments } = useAppSelector(selector);
   const dispatch = useAppDispatch();
 
@@ -58,7 +60,8 @@ function ChatInput() {
   };
 
   const handleSend = () => {
-    dispatch(sendMessage(message));
+    // dispatch(sendMessage(message));
+    getCompletions({ prompt: message });
     dispatch(resetMessage());
     dispatch(clearAttachments());
     clearFiles();
