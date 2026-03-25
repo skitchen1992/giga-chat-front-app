@@ -5,7 +5,9 @@ import {
   gigaChatAuthorizationKey,
   gigaChatOauthScope,
 } from "@/shared/config/env";
-import { setToken } from "@/features/auth/model/slice";
+import { persistAuthSession, oauthExpiresAtToMs } from "@/features/auth/lib/persistedAuthSession";
+import { setAuthSession } from "@/features/auth/model/slice";
+import { setModelList } from "@/features/settings/model/slice";
 
 export interface AccessTokenResponse {
   access_token: string;
@@ -33,6 +35,16 @@ export interface CompletionsResponse {
     precached_prompt_tokens: number;
   };
 }
+export interface Model {
+  id: string;
+  object: string;
+  owned_by: string;
+}
+export interface ModelResponse {
+  data: Model[];
+  object: string;
+}
+
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
@@ -76,7 +88,28 @@ export const api = createApi({
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setToken(data.access_token));
+          const tokenExpiresAtMs = oauthExpiresAtToMs(data.expires_at);
+          const session = {
+            accessToken: data.access_token,
+            tokenExpiresAtMs,
+          };
+          dispatch(setAuthSession(session));
+          persistAuthSession(session);
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
+    getModels: build.query<ModelResponse, void>({
+      query: () => ({
+        url: "/models",
+        method: "GET",
+      }),
+
+      async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setModelList(data.data));
         } catch (error) {
           console.error(error);
         }
@@ -102,4 +135,4 @@ export const api = createApi({
   }),
 });
 
-export const { useGetAuthTokenMutation, useGetCompletionsMutation } = api;
+export const { useGetAuthTokenMutation, useGetCompletionsMutation, useGetModelsQuery } = api;

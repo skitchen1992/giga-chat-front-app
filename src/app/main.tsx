@@ -9,8 +9,9 @@ import { AuthInit } from "@/features/auth";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <AuthInit />
-      <App />
+      <AuthInit>
+        <App />
+      </AuthInit>
     </Provider>
   </StrictMode>
 );
