@@ -1,4 +1,5 @@
 import authSlice from "@/features/auth/model/slice";
+import assistantResponseReducer from "@/features/assistant-response/model/slice";
 import sendMessageSlice from "@/features/send-message/model/slice";
 import { configureStore } from "@reduxjs/toolkit";
 import { api } from "@/app/services/api";
@@ -8,6 +9,7 @@ export const store = configureStore({
     [api.reducerPath]: api.reducer,
     sendMessage: sendMessageSlice,
     auth: authSlice,
+    assistantResponse: assistantResponseReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),

@@ -9,7 +9,6 @@ import {
   clearAttachments,
   removeAttachment,
   resetMessage,
-  sendMessage,
   setMessage,
 } from "../../model/slice";
 import { useDropzone } from "react-dropzone";
@@ -18,7 +17,7 @@ import { formatFileSize } from "@/shared/lib";
 import { useGetCompletionsMutation } from "@/app/services/api";
 
 function ChatInput() {
-  const [getCompletions] = useGetCompletionsMutation();
+  const [getCompletions, { isLoading }] = useGetCompletionsMutation();
   const { message, attachments } = useAppSelector(selector);
   const dispatch = useAppDispatch();
 
@@ -52,8 +51,6 @@ function ChatInput() {
     },
     maxSize: 10 * 1024 * 1024, // 10 MB
   });
-
-  const isLoading = false;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     dispatch(setMessage(e.target.value));

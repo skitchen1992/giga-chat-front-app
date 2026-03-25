@@ -1,9 +1,18 @@
-import { ChevronDown, Pencil, Plus, Rocket, Search, User } from "lucide-react";
+import { ChevronDown, Pencil, Rocket, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAppSelector } from "@/app/store/hooks";
+import {
+  AssistantResponse,
+  selectAssistantResponse,
+} from "@/features/assistant-response";
 import ChatInput from "@/features/send-message/ui/ChatInput/ChatInput";
 
 export function App() {
+  const { text, status, error } = useAppSelector(selectAssistantResponse);
+  const showEmptyPlaceholder =
+    status === "idle" && !text && !error;
+
   return (
     <div className="flex h-screen bg-background">
       {/* Шапка */}
@@ -80,9 +89,20 @@ export function App() {
 
       {/* Основная область */}
       <main className="ml-64 flex flex-1 flex-col pt-12">
-        <div className="flex flex-1 flex-col items-center justify-center px-4 pb-8">
-          <h2 className="mb-8 text-2xl font-medium">Готов, когда ты готов.</h2>
-          <ChatInput />
+        <div className="flex min-h-0 flex-1 flex-col px-4 pb-6">
+          <div className="flex min-h-0 flex-1 flex-col items-center gap-6 overflow-y-auto py-8">
+            <AssistantResponse />
+            {showEmptyPlaceholder ? (
+              <div className="flex w-full flex-1 flex-col items-center justify-center">
+                <h2 className="text-center text-2xl font-medium text-muted-foreground">
+                  Готов, когда ты готов.
+                </h2>
+              </div>
+            ) : null}
+          </div>
+          <div className="flex shrink-0 justify-center pt-2">
+            <ChatInput />
+          </div>
         </div>
 
         <footer className="py-4 text-center">
