@@ -1,4 +1,31 @@
 // Public API для shared/lib
 // Утилиты, хелперы, хуки
 
-export { formatFileSize } from "./formatFileSize";
+export type {
+	DBSchema,
+	IDBPDatabase,
+	IDBPTransaction,
+	IndexKey,
+	IndexNames,
+	StoreKey,
+	StoreNames,
+	StoreValue
+} from 'idb'
+export {openDB} from 'idb'
+export type {ChatAppChatRecord} from './chat-app-db/chatAppDb'
+export {
+	getAllChatsFromIndexedDb,
+	putChatInIndexedDb
+} from './chat-app-db/chatAppDb'
+export {formatFileSize} from './formatFileSize'
+export {
+	type CreateIndexedDbConnectionOptions,
+	createIndexedDbConnection,
+	deleteIndexedDb,
+	type IndexedDbConnection
+} from './indexed-db/createIndexedDbConnection'
+export {
+	createObjectStoreAccess,
+	type ObjectStoreAccess
+} from './indexed-db/createObjectStoreAccess'
+export {runIndexedDbTransaction} from './indexed-db/runIndexedDbTransaction'

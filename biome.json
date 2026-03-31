@@ -134,6 +134,16 @@
 			"linter": {
 				"enabled": false
 			}
+		},
+		{
+			"includes": ["src/shared/lib/index.ts"],
+			"linter": {
+				"rules": {
+					"performance": {
+						"noBarrelFile": "off"
+					}
+				}
+			}
 		}
 	]
 }
