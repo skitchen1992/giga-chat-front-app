@@ -1,0 +1,28 @@
+---
+description: Один useAppSelector на компонент; логика выбора состояния в colocated selector.ts
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# Redux-селекторы в UI-компонентах
+
+## `useAppSelector`
+
+- В одном компоненте допускается **не более одного** вызова `useAppSelector`.
+- Если нужны несколько полей из стора, собери их **одним** селектором (через `createSelector` и композицию селекторов из `model`), а в компоненте вызови `useAppSelector` один раз.
+
+## Colocated `selector.ts`
+
+- Для компонента со сложным выбором состояния заведи рядом с ним файл `selector.ts` (в той же папке, что и `.tsx`).
+- Вноси в него комбинированные селекторы и производную логику отображения, чтобы компонент оставался тонким.
+
+```typescript
+// ❌ Нельзя — несколько подписок на стор в одном компоненте
+const a = useAppSelector(selectA);
+const b = useAppSelector(selectB);
+
+// ✅ Один селектор рядом с компонентом (selector.ts) + один вызов
+const { a, b } = useAppSelector(selectMyComponentState);
+```
+
+Импорт селектора из `./selector` допустим только внутри того же UI-модуля; наружу (public API фичи) выносить этот селектор не обязательно.

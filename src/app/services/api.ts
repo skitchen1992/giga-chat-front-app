@@ -88,7 +88,9 @@ export const api = createApi({
       async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
         try {
           const { data } = await queryFulfilled;
+
           const tokenExpiresAtMs = oauthExpiresAtToMs(data.expires_at);
+          
           const session = {
             accessToken: data.access_token,
             tokenExpiresAtMs,

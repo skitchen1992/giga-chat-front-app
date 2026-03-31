@@ -1,58 +1,31 @@
-import { Pencil, Rocket, Search, User } from "lucide-react";
+import { Pencil, Search, User } from "lucide-react";
 import { type ChangeEvent, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { clearAssistantResponse } from "@/features/assistant-response";
+import { clearFiles } from "@/features/send-message/model/attachmentStore";
+import {
+  clearAttachments,
+  resetMessage,
+} from "@/features/send-message/model/slice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import {
-  selectChatSidebarActiveId,
-  selectChatSidebarSearchQuery,
-  selectFilteredChats,
-} from "../model/selectors";
-import type { ChatListItem } from "../model/slice";
-import { setActiveChatId, setSearchQuery } from "../model/slice";
-import { createNewChatThunk } from "../model/thunks";
-
-function ChatSidebarRow({ chat }: { chat: ChatListItem }) {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const activeChatId = useAppSelector(selectChatSidebarActiveId);
-  const isActive = chat.id === activeChatId;
-  const handleClick = useCallback(() => {
-    dispatch(setActiveChatId(chat.id));
-    Promise.resolve(navigate(`/chat/${chat.id}`)).catch(() => undefined);
-  }, [dispatch, navigate, chat.id]);
-
-  return (
-    <li>
-      <button
-        className={cn(
-          "flex w-full items-center justify-between gap-2 rounded-md px-3 py-2 text-left text-muted-foreground text-sm hover:bg-sidebar-accent",
-          isActive && "bg-sidebar-accent font-medium text-foreground"
-        )}
-        onClick={handleClick}
-        type="button"
-      >
-        <span className="truncate">{chat.title}</span>
-        <Rocket className="size-4 shrink-0 opacity-50" />
-      </button>
-    </li>
-  );
-}
+import { setSearchQuery } from "../../model/slice";
+import { ChatSidebarRow } from "../ChatSidebarRow/ChatSidebarRow";
+import { selectChatSidebarView } from "./selector";
 
 export function ChatSidebar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const searchQuery = useAppSelector(selectChatSidebarSearchQuery);
-  const filteredChats = useAppSelector(selectFilteredChats);
+  const { searchQuery, filteredChats } = useAppSelector(selectChatSidebarView);
 
   const handleNewChat = useCallback(() => {
-    dispatch(createNewChatThunk())
-      .unwrap()
-      .then(({ id }) => Promise.resolve(navigate(`/chat/${id}`)))
-      .catch(() => undefined);
+    dispatch(clearAssistantResponse());
+    dispatch(resetMessage());
+    dispatch(clearAttachments());
+    clearFiles();
+    Promise.resolve(navigate("/chat/new")).catch(() => undefined);
   }, [dispatch, navigate]);
 
   const handleSearchChange = useCallback(

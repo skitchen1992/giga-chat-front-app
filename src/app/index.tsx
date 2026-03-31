@@ -30,7 +30,9 @@ export function App() {
 	}, [dispatch])
 
 	useEffect(() => {
-		dispatch(setActiveChatId(chatId ?? null))
+		const resolved =
+			chatId != null && chatId !== 'new' ? chatId : null
+		dispatch(setActiveChatId(resolved))
 	}, [chatId, dispatch])
 
 	useEffect(() => {

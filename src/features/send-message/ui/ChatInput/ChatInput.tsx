@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowUpIcon, FileText, Loader2, Plus, X } from "lucide-react";
+import { useCallback } from "react";
+import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
+import { useGetCompletionsMutation } from "@/app/services/api";
+import { createNewChatThunk } from "@/features/chat-sidebar";
 import selector from "./selector";
 import { addFile, clearFiles, removeFile } from "../../model/attachmentStore";
 import {
@@ -14,12 +18,29 @@ import {
 import { useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
 import { formatFileSize } from "@/shared/lib";
-import { useGetCompletionsMutation } from "@/app/services/api";
 
 function ChatInput() {
   const [getCompletions, { isLoading }] = useGetCompletionsMutation();
   const { message, attachments } = useAppSelector(selector);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { chatId } = useParams();
+
+  const persistDraftChatIfNeeded = useCallback(
+    async (messageText: string) => {
+      const isDraftRoute = chatId == null || chatId === "new";
+      if (!isDraftRoute) return;
+      try {
+        const { id } = await dispatch(
+          createNewChatThunk({ firstUserMessage: messageText })
+        ).unwrap();
+        await navigate(`/chat/${id}`, { replace: true });
+      } catch {
+        // без записи в IndexedDB не переходим на постоянный URL
+      }
+    },
+    [chatId, dispatch, navigate]
+  );
 
   const {
     getRootProps,
@@ -56,7 +77,9 @@ function ChatInput() {
     dispatch(setMessage(e.target.value));
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    const text = message.trim();
+    await persistDraftChatIfNeeded(text);
     // dispatch(sendMessage(message));
     getCompletions({ prompt: message });
     dispatch(resetMessage());
@@ -68,7 +91,7 @@ function ChatInput() {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if ((message.trim() || attachments.length > 0) && !isLoading) {
-        handleSend();
+        void handleSend();
       }
     }
     if (e.key === "Escape") {
