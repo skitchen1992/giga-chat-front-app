@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowUpIcon, FileText, Loader2, Plus, X } from "lucide-react";
-import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { useGetCompletionsMutation } from "@/app/services/api";
@@ -26,21 +25,22 @@ function ChatInput() {
   const navigate = useNavigate();
   const { chatId } = useParams();
 
-  const persistDraftChatIfNeeded = useCallback(
-    async (messageText: string) => {
-      const isDraftRoute = chatId == null || chatId === "new";
-      if (!isDraftRoute) return;
-      try {
-        const { id } = await dispatch(
-          createNewChatThunk({ firstUserMessage: messageText })
-        ).unwrap();
-        await navigate(`/chat/${id}`, { replace: true });
-      } catch {
-        // без записи в IndexedDB не переходим на постоянный URL
-      }
-    },
-    [chatId, dispatch, navigate]
-  );
+  const persistDraftChatIfNeeded = async (messageText: string) => {
+    const isDraftRoute = chatId == null || chatId === "new";
+
+    if (!isDraftRoute) {
+      return;
+    }
+
+    try {
+      const { id } = await dispatch(
+        createNewChatThunk({ firstUserMessage: messageText })
+      ).unwrap();
+      await navigate(`/chat/${id}`, { replace: true });
+    } catch {
+      // без записи в IndexedDB не переходим на постоянный URL
+    }
+  };
 
   const {
     getRootProps,
@@ -79,8 +79,8 @@ function ChatInput() {
 
   const handleSend = async () => {
     const text = message.trim();
+
     await persistDraftChatIfNeeded(text);
-    // dispatch(sendMessage(message));
     getCompletions({ prompt: message });
     dispatch(resetMessage());
     dispatch(clearAttachments());

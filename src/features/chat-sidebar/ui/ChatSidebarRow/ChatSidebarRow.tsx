@@ -1,5 +1,4 @@
 import { Rocket } from "lucide-react";
-import { useCallback } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { cn } from "@/lib/utils";
@@ -19,10 +18,11 @@ export function ChatSidebarRow({ chat }: ChatSidebarRowProps) {
   const activeChatId = useAppSelector(selectChatSidebarActiveId);
   const isActive = id === activeChatId;
 
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     dispatch(setActiveChatId(id));
-    Promise.resolve(navigate(`/chat/${id}`)).catch(() => undefined);
-  }, [dispatch, navigate, id]);
+
+    navigate(`/chat/${id}`);
+  };
 
   return (
     <li>

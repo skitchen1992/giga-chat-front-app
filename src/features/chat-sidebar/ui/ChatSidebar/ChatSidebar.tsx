@@ -25,7 +25,8 @@ export function ChatSidebar() {
     dispatch(resetMessage());
     dispatch(clearAttachments());
     clearFiles();
-    Promise.resolve(navigate("/chat/new")).catch(() => undefined);
+
+    navigate("/chat/new")
   }, [dispatch, navigate]);
 
   const handleSearchChange = useCallback(
