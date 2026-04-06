@@ -3,8 +3,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowUpIcon, FileText, Loader2, Plus, X } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import { useGetCompletionsMutation } from "@/app/services/api";
+import { useGetCompletionsMutation } from "@/shared/api";
+import type { ChatMessage } from "@/shared/api";
 import { createNewChatThunk } from "@/features/chat-sidebar";
+import { appendMessage } from "@/features/chat-history";
 import selector from "./selector";
 import { addFile, clearFiles, removeFile } from "../../model/attachmentStore";
 import {
@@ -16,7 +18,7 @@ import {
 } from "../../model/slice";
 import { useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
-import { formatFileSize } from "@/shared/lib";
+import { formatFileSize, getMessagesByChatId, putMessageInIndexedDb } from "@/shared/lib";
 
 function ChatInput() {
   const [getCompletions, { isLoading }] = useGetCompletionsMutation();
@@ -25,11 +27,11 @@ function ChatInput() {
   const navigate = useNavigate();
   const { chatId } = useParams();
 
-  const persistDraftChatIfNeeded = async (messageText: string) => {
+  const persistDraftChatIfNeeded = async (messageText: string): Promise<string | null> => {
     const isDraftRoute = chatId == null || chatId === "new";
 
     if (!isDraftRoute) {
-      return;
+      return chatId ?? null;
     }
 
     try {
@@ -37,8 +39,10 @@ function ChatInput() {
         createNewChatThunk({ firstUserMessage: messageText })
       ).unwrap();
       await navigate(`/chat/${id}`, { replace: true });
+      return id;
     } catch {
       // без записи в IndexedDB не переходим на постоянный URL
+      return null;
     }
   };
 
@@ -80,8 +84,45 @@ function ChatInput() {
   const handleSend = async () => {
     const text = message.trim();
 
-    await persistDraftChatIfNeeded(text);
-    getCompletions({ prompt: message });
+    const resolvedChatId = await persistDraftChatIfNeeded(text);
+
+    const userMessage: ChatMessage = { role: "user", content: text };
+
+    if (resolvedChatId) {
+      const userRecord = {
+        id: crypto.randomUUID(),
+        chatId: resolvedChatId,
+        role: "user" as const,
+        content: text,
+        createdAt: Date.now(),
+      };
+      await putMessageInIndexedDb(userRecord);
+      dispatch(appendMessage(userRecord));
+
+      const history = await getMessagesByChatId(resolvedChatId);
+      const messages: ChatMessage[] = history.map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+
+      const result = await getCompletions({ messages }).unwrap();
+      const assistantContent = result.choices?.[0]?.message?.content;
+
+      if (assistantContent) {
+        const assistantRecord = {
+          id: crypto.randomUUID(),
+          chatId: resolvedChatId,
+          role: "assistant" as const,
+          content: assistantContent,
+          createdAt: Date.now(),
+        };
+        await putMessageInIndexedDb(assistantRecord);
+        dispatch(appendMessage(assistantRecord));
+      }
+    } else {
+      getCompletions({ messages: [userMessage] });
+    }
+
     dispatch(resetMessage());
     dispatch(clearAttachments());
     clearFiles();

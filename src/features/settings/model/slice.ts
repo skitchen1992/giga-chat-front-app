@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Model } from "@/app/services/api";
+import type { Model } from "@/shared/api";
 
 export interface SettingsState {
   modelList: Model[];

@@ -3,12 +3,12 @@ import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
 import { selectAppState } from "@/app/selector";
-import { AssistantResponse } from "@/features/assistant-response";
 import {
   ChatSidebar,
   hydrateChatsFromIndexedDb,
   setActiveChatId,
 } from "@/features/chat-sidebar";
+import { ChatHistory, loadChatHistoryThunk, clearHistory } from "@/features/chat-history";
 import ChatInput from "@/features/send-message/ui/ChatInput/ChatInput";
 
 export function App() {
@@ -16,9 +16,7 @@ export function App() {
   const navigate = useNavigate();
   const location = useLocation();
   const { chatId } = useParams();
-  const { hydrated, chats, text, status, error } = useAppSelector(selectAppState);
-
-  const showEmptyPlaceholder = status === "idle" && !text && !error;
+  const { hydrated, chats } = useAppSelector(selectAppState);
 
   useEffect(() => {
     dispatch(hydrateChatsFromIndexedDb());
@@ -27,6 +25,12 @@ export function App() {
   useEffect(() => {
     const resolved = chatId != null && chatId !== "new" ? chatId : null;
     dispatch(setActiveChatId(resolved));
+
+    if (resolved) {
+      dispatch(loadChatHistoryThunk(resolved));
+    } else {
+      dispatch(clearHistory());
+    }
   }, [chatId]);
 
   useEffect(() => {
@@ -63,14 +67,7 @@ export function App() {
       <main className="ml-64 flex flex-1 flex-col pt-12">
         <div className="flex min-h-0 flex-1 flex-col px-4 pb-6">
           <div className="flex min-h-0 flex-1 flex-col items-center gap-6 overflow-y-auto py-8">
-            <AssistantResponse />
-            {showEmptyPlaceholder ? (
-              <div className="flex w-full flex-1 flex-col items-center justify-center">
-                <h2 className="text-center font-medium text-2xl text-muted-foreground">
-                  Готов, когда ты готов.
-                </h2>
-              </div>
-            ) : null}
+            <ChatHistory />
           </div>
           <div className="flex shrink-0 justify-center pt-2">
             <ChatInput />

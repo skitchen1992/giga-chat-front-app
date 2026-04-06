@@ -1,4 +1,4 @@
-import { api } from "@/app/services/api";
+import { api } from "@/shared/api";
 import { createSlice } from "@reduxjs/toolkit";
 
 export type AssistantResponseStatus = "idle" | "loading" | "success" | "error";

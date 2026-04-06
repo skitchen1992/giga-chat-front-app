@@ -1,4 +1,4 @@
-import { api } from "@/app/services/api";
+import { api } from "@/shared/api";
 import type { AppDispatch } from "@/app/store";
 import {
   clearPersistedAuthSession,

@@ -5,6 +5,7 @@ import authSlice from "@/features/auth/model/slice";
 import { chatSidebarReducer } from "@/features/chat-sidebar/model/slice";
 import sendMessageSlice from "@/features/send-message/model/slice";
 import settingsSlice from "@/features/settings/model/slice";
+import chatHistoryReducer from "@/features/chat-history/model/slice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     assistantResponse: assistantResponseSlice,
     chatSidebar: chatSidebarReducer,
     settings: settingsSlice,
+    chatHistory: chatHistoryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(api.middleware),
