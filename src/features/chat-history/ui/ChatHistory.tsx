@@ -7,7 +7,7 @@ import { AssistantMessage } from "./AssistantMessage";
 
 export function ChatHistory() {
   const { messages } = useAppSelector(selectChatHistory);
-  const { status: apiStatus, error } = useAppSelector(selectAssistantResponse);
+  const { status: apiStatus } = useAppSelector(selectAssistantResponse);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -48,13 +48,6 @@ export function ChatHistory() {
           </div>
         );
       })}
-
-      {apiStatus === "error" && error && (
-        <p className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-destructive text-sm">
-          {error}
-        </p>
-      )}
-
       <div ref={bottomRef} />
     </div>
   );
