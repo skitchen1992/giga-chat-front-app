@@ -98,6 +98,7 @@ export const api = createApi({
       CompletionsResponse,
       {
         messages: ChatMessage[];
+        model?: string;
         temperature?: number;
         top_p?: number;
         max_tokens?: number;
@@ -106,6 +107,7 @@ export const api = createApi({
     >({
       query: ({
         messages,
+        model,
         temperature,
         top_p,
         max_tokens,
@@ -114,7 +116,7 @@ export const api = createApi({
         url: "/chat/completions",
         method: "POST",
         body: {
-          model: "GigaChat-2-Max",
+          model: model ?? "GigaChat-2-Max",
           messages,
           ...(temperature !== undefined && { temperature }),
           ...(top_p !== undefined && { top_p }),
