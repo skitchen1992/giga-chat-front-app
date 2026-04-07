@@ -1,0 +1,28 @@
+---
+description: Запрет инлайн-условий (if без фигурных скобок)
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Без инлайн-условий
+
+Всегда используй фигурные скобки для `if`, `else`, `for`, `while` — даже для однострочных тел.
+
+```typescript
+// ❌ BAD
+if (!line) return "Новый чат";
+
+if (isValid)
+  doSomething();
+
+// ✅ GOOD
+if (!line) {
+  return "Новый чат";
+}
+
+if (isValid) {
+  doSomething();
+}
+```
+
+Правило закреплено в `biome.json` как `style.useBlockStatements: "error"`.

@@ -1,3 +1,3 @@
-import type { RootState } from "@/app/store";
+import type {RootState} from '@/app/store'
 
-export const selectSettings = (state: RootState) => state.settings;
+export const selectSettings = (state: RootState) => state.settings

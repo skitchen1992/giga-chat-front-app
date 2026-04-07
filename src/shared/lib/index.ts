@@ -12,12 +12,19 @@ export type {
 	StoreValue
 } from 'idb'
 export {openDB} from 'idb'
-export type {ChatAppChatRecord, ChatAppMessageRecord, MessageRole} from './chat-app-db/chatAppDb'
+export type {
+	ChatAppChatRecord,
+	ChatAppMessageRecord,
+	MessageRole
+} from './chat-app-db/chatAppDb'
 export {
+	deleteChatFromIndexedDb,
+	deleteMessagesByChatId,
 	getAllChatsFromIndexedDb,
-	putChatInIndexedDb,
 	getMessagesByChatId,
+	putChatInIndexedDb,
 	putMessageInIndexedDb,
+	updateChatTitleInIndexedDb
 } from './chat-app-db/chatAppDb'
 export {formatFileSize} from './formatFileSize'
 export {

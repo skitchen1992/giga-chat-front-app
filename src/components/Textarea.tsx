@@ -1,7 +1,5 @@
 function Textarea() {
-  return (
-    <div>Textarea</div>
-  )
+	return <div>Textarea</div>
 }
 
 export default Textarea

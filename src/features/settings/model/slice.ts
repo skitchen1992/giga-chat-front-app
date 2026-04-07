@@ -1,25 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import type { Model } from "@/shared/api";
+import type {PayloadAction} from '@reduxjs/toolkit'
+import {createSlice} from '@reduxjs/toolkit'
+import type {Model} from '@/shared/api'
 
 export interface SettingsState {
-  modelList: Model[];
+	modelList: Model[]
 }
 
 const initialState: SettingsState = {
-  modelList: [],
-};
+	modelList: []
+}
 
 export const settingsSlice = createSlice({
-  name: "settings",
-  initialState,
-  reducers: {
-    setModelList: (state, action: PayloadAction<Model[]>) => {
-      state.modelList = action.payload;
-    },
-  },
-});
+	name: 'settings',
+	initialState,
+	reducers: {
+		setModelList: (state, action: PayloadAction<Model[]>) => {
+			state.modelList = action.payload
+		}
+	}
+})
 
-export const { setModelList } = settingsSlice.actions;
+export const {setModelList} = settingsSlice.actions
 
-export default settingsSlice.reducer;
+export default settingsSlice.reducer

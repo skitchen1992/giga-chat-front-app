@@ -22,7 +22,9 @@ export const selectFilteredChats = createSelector(
 	[selectChatSidebar],
 	sidebar => {
 		const q = sidebar.searchQuery.trim().toLowerCase()
-		if (!q) return sidebar.chats
+		if (!q) {
+			return sidebar.chats
+		}
 		return sidebar.chats.filter(chat => chat.title.toLowerCase().includes(q))
 	}
 )

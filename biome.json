@@ -74,7 +74,7 @@
 					"style": {
 						"noMagicNumbers": "off",
 						"useExportsLast": "off",
-						"useBlockStatements": "off",
+						"useBlockStatements": "error",
 						"useNamingConvention": {
 							"level": "error",
 							"options": {

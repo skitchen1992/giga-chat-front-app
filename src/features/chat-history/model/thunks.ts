@@ -1,9 +1,7 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getMessagesByChatId } from "@/shared/lib";
+import {createAsyncThunk} from '@reduxjs/toolkit'
+import {getMessagesByChatId} from '@/shared/lib'
 
 export const loadChatHistoryThunk = createAsyncThunk(
-  "chatHistory/load",
-  async (chatId: string) => {
-    return getMessagesByChatId(chatId);
-  }
-);
+	'chatHistory/load',
+	async (chatId: string) => getMessagesByChatId(chatId)
+)
