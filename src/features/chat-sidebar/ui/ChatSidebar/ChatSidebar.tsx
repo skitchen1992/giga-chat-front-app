@@ -1,4 +1,4 @@
-import { Pencil, Search, User } from "lucide-react";
+import { Pencil, Search } from "lucide-react";
 import { type ChangeEvent, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
@@ -81,20 +81,6 @@ export function ChatSidebar() {
               <ChatSidebarRow chat={chat} key={chat.id} />
             ))}
           </ul>
-        </div>
-      </div>
-
-      <div className="border-sidebar-border border-t p-3">
-        <div className="mb-3 flex items-center gap-2">
-          <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
-            <User className="size-4 text-primary" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate font-medium text-sm">Никита Лаврентьев</p>
-            <p className="truncate text-muted-foreground text-xs">
-              Рабочая область Никита Лаврентьев
-            </p>
-          </div>
         </div>
       </div>
     </aside>
