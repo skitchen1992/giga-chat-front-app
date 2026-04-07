@@ -152,7 +152,7 @@ function ChatInput() {
 	}
 
 	return (
-		<div className='w-full max-w-2xl space-y-3' {...getRootProps()}>
+		<div className='w-full max-w-4xl space-y-3' {...getRootProps()}>
 			{attachments.length > 0 && (
 				<div className='flex flex-wrap gap-2'>
 					{attachments.map(attachment => (
