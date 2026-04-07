@@ -34,12 +34,12 @@ import {deleteChatThunk, renameChatThunk} from '../../model/thunks'
 import {makeSelectChatSidebarRowState} from './selector'
 
 export interface ChatSidebarRowProps {
-	chat: {id: string; title: string}
+	chat: {id: string; title: string; snippet?: string}
 }
 
 export function ChatSidebarRow(props: ChatSidebarRowProps) {
 	const {chat} = props
-	const {id, title} = chat
+	const {id, title, snippet} = chat
 
 	const dispatch = useAppDispatch()
 	const navigate = useNavigate()
@@ -90,13 +90,18 @@ export function ChatSidebarRow(props: ChatSidebarRowProps) {
 						isActive && 'bg-sidebar-accent font-medium text-foreground'
 					)}
 				>
-					<button
-						className='min-w-0 flex-1 truncate text-left'
-						onClick={handleClick}
-						type='button'
-					>
-						{title}
-					</button>
+				<button
+					className='min-w-0 flex-1 overflow-hidden text-left'
+					onClick={handleClick}
+					type='button'
+				>
+					<span className='block truncate'>{title}</span>
+					{snippet && (
+						<span className='block truncate text-muted-foreground text-xs font-normal'>
+							{snippet}
+						</span>
+					)}
+				</button>
 
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild={true}>

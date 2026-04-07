@@ -4,6 +4,7 @@ import {
 	deleteMessagesByChatId,
 	getAllChatsFromIndexedDb,
 	putChatInIndexedDb,
+	searchMessageContent,
 	updateChatTitleInIndexedDb
 } from '@/shared/lib'
 
@@ -58,6 +59,18 @@ export const renameChatThunk = createAsyncThunk(
 		const trimmed = payload.title.trim() || 'Новый чат'
 		await updateChatTitleInIndexedDb(payload.id, trimmed)
 		return {id: payload.id, title: trimmed}
+	}
+)
+
+export const searchMessagesContentThunk = createAsyncThunk(
+	'chatSidebar/searchMessagesContent',
+	async (query: string) => {
+		const results = await searchMessageContent(query)
+		
+		return results.reduce<Record<string, string>>((acc, r) => {
+			acc[r.chatId] = r.snippet
+			return acc
+		}, {})
 	}
 )
 

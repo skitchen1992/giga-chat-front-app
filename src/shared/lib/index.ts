@@ -15,7 +15,8 @@ export {openDB} from 'idb'
 export type {
 	ChatAppChatRecord,
 	ChatAppMessageRecord,
-	MessageRole
+	MessageRole,
+	MessageSearchResult
 } from './chat-app-db/chatAppDb'
 export {
 	deleteChatFromIndexedDb,
@@ -24,6 +25,7 @@ export {
 	getMessagesByChatId,
 	putChatInIndexedDb,
 	putMessageInIndexedDb,
+	searchMessageContent,
 	updateChatTitleInIndexedDb
 } from './chat-app-db/chatAppDb'
 export {formatFileSize} from './formatFileSize'

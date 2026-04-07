@@ -96,6 +96,44 @@ export async function deleteMessagesByChatId(chatId: string): Promise<void> {
 	await Promise.all(messages.map(m => messagesStore.delete(m.id)))
 }
 
+export interface MessageSearchResult {
+	chatId: string
+	snippet: string
+}
+
+function extractSnippet(text: string, query: string): string {
+	const normalized = text.replace(/\s+/gu, ' ').trim()
+	const idx = normalized.toLowerCase().indexOf(query.toLowerCase())
+
+	if (idx === -1){
+		return normalized.slice(0, 80)
+	}
+
+	const start = Math.max(0, idx - 25)
+	const end = Math.min(normalized.length, idx + query.length + 50);
+	const snippet = normalized.slice(start, end);
+	
+	return (start > 0 ? '…' : '') + snippet + (end < normalized.length ? '…' : '');
+}
+
+export async function searchMessageContent(
+	query: string
+): Promise<MessageSearchResult[]> {
+	const allMessages = await messagesStore.getAll()
+	const lower = query.toLowerCase()
+	const seen = new Set<string>()
+	const results: MessageSearchResult[] = []
+
+	for (const msg of allMessages) {
+		if (!seen.has(msg.chatId) && msg.content.toLowerCase().includes(lower)) {
+			seen.add(msg.chatId)
+			results.push({chatId: msg.chatId, snippet: extractSnippet(msg.content, query)})
+		}
+	}
+
+	return results
+}
+
 export async function updateChatTitleInIndexedDb(
 	chatId: string,
 	title: string

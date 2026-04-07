@@ -18,13 +18,44 @@ export const selectChatSidebarHydrated = createSelector(
 	sidebar => sidebar.chatsHydrated
 )
 
+export interface FilteredChat {
+	id: string
+	title: string
+	snippet?: string
+}
+
+export const selectContentMatches = createSelector(
+	[selectChatSidebar],
+	sidebar => sidebar.contentMatches
+)
+
 export const selectFilteredChats = createSelector(
 	[selectChatSidebar],
-	sidebar => {
+	(sidebar): FilteredChat[] => {
 		const q = sidebar.searchQuery.trim().toLowerCase()
+
 		if (!q) {
 			return sidebar.chats
 		}
-		return sidebar.chats.filter(chat => chat.title.toLowerCase().includes(q))
+
+		const titleMatched = sidebar.chats.filter(chat =>
+			chat.title.toLowerCase().includes(q)
+		)
+		const titleMatchedIds = new Set(titleMatched.map(c => c.id))
+
+		const contentOnlyMatched: FilteredChat[] = sidebar.chats
+			.filter(
+				chat =>
+					!titleMatchedIds.has(chat.id) &&
+					chat.id in sidebar.contentMatches
+			)
+			.map(chat => ({
+				...chat,
+				...(sidebar.contentMatches[chat.id] !== undefined && {
+					snippet: sidebar.contentMatches[chat.id]
+				})
+			}))
+
+		return [...titleMatched, ...contentOnlyMatched]
 	}
 )

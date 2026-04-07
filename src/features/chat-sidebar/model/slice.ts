@@ -4,7 +4,8 @@ import {
 	createNewChatThunk,
 	deleteChatThunk,
 	hydrateChatsFromIndexedDb,
-	renameChatThunk
+	renameChatThunk,
+	searchMessagesContentThunk
 } from './thunks'
 
 export interface ChatListItem {
@@ -17,13 +18,15 @@ export interface ChatSidebarState {
 	searchQuery: string
 	activeChatId: string | null
 	chatsHydrated: boolean
+	contentMatches: Record<string, string>
 }
 
 const initialState: ChatSidebarState = {
 	chats: [],
 	searchQuery: '',
 	activeChatId: null,
-	chatsHydrated: false
+	chatsHydrated: false,
+	contentMatches: {}
 }
 
 export const chatSidebarSlice = createSlice({
@@ -32,6 +35,9 @@ export const chatSidebarSlice = createSlice({
 	reducers: {
 		setSearchQuery: (state, action: PayloadAction<string>) => {
 			state.searchQuery = action.payload
+			if (!action.payload.trim()) {
+				state.contentMatches = {}
+			}
 		},
 		setActiveChatId: (state, action: PayloadAction<string | null>) => {
 			state.activeChatId = action.payload
@@ -56,6 +62,9 @@ export const chatSidebarSlice = createSlice({
 				if (chat) {
 					chat.title = title
 				}
+			})
+			.addCase(searchMessagesContentThunk.fulfilled, (state, action) => {
+				state.contentMatches = action.payload
 			})
 			.addCase(deleteChatThunk.fulfilled, (state, action) => {
 				const deletedId = action.payload
