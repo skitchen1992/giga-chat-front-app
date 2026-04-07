@@ -1,10 +1,9 @@
-import { Loader2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { useAppSelector } from "@/app/store/hooks";
 import { selectAssistantResponse } from "@/features/assistant-response";
 import { cn } from "@/lib/utils";
 import { selectChatHistory } from "../model/selectors";
-import { MarkdownRenderer } from "./MarkdownRenderer";
+import { AssistantMessage } from "./AssistantMessage";
 
 export function ChatHistory() {
   const { messages } = useAppSelector(selectChatHistory);
@@ -44,26 +43,7 @@ export function ChatHistory() {
                 {msg.content}
               </div>
             ) : (
-              <div className="max-w-[85%] space-y-1">
-                <div className="flex items-center gap-2 font-medium text-muted-foreground text-xs">
-                  GigaChat
-                </div>
-                <div
-                  className={cn(
-                    "rounded-2xl rounded-tl-sm border border-border bg-muted/30 px-4 py-3 text-sm leading-relaxed",
-                    isPending && "text-muted-foreground"
-                  )}
-                >
-                  {isPending ? (
-                    <span className="flex items-center gap-2">
-                      <Loader2 className="size-4 animate-spin" />
-                      Генерация ответа…
-                    </span>
-                  ) : (
-                    <MarkdownRenderer content={msg.content} />
-                  )}
-                </div>
-              </div>
+              <AssistantMessage content={msg.content} isPending={isPending} />
             )}
           </div>
         );
