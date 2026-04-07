@@ -1,1 +1,1 @@
-export { ErrorFallback, makeErrorFallback } from "./ErrorFallback";
+export { ErrorFallback, makeErrorFallback } from "./ErrorFallback"

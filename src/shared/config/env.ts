@@ -7,14 +7,14 @@
 export function readEnv(...keys: string[]): string | undefined {
 	for (const key of keys) {
 		const value = import.meta.env[key as keyof ImportMetaEnv]
-		if (typeof value === 'string' && value.length > 0) {
+		if (typeof value === "string" && value.length > 0) {
 			return value
 		}
 	}
 }
 
 export const gigaChatAuthorizationKey = (): string | undefined =>
-	readEnv('VITE_GIGA_CHAT_AUTHORIZATION_KEY')
+	readEnv("VITE_GIGA_CHAT_AUTHORIZATION_KEY")
 
 export const gigaChatOauthScope = (): string | undefined =>
-	readEnv('VITE_GIGA_OAUTH_SCOPE')
+	readEnv("VITE_GIGA_OAUTH_SCOPE")

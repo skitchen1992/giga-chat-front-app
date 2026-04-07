@@ -1,6 +1,6 @@
-import type {DBSchema, StoreNames} from 'idb'
-import {bindObjectStoreAccess} from './bindObjectStoreShortcuts'
-import type {IndexedDbConnection} from './createIndexedDbConnection'
+import type { DBSchema, StoreNames } from "idb"
+import { bindObjectStoreAccess } from "./bindObjectStoreShortcuts"
+import type { IndexedDbConnection } from "./createIndexedDbConnection"
 
 /**
  * Типизированные шорткаты idb для одного object store: чтение, запись, индексы, count.

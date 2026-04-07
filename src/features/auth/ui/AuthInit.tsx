@@ -1,12 +1,12 @@
-import {useCallback, useEffect, useState} from 'react'
-import {useAppDispatch, useAppSelector} from '@/app/store/hooks'
-import {Button} from '@/components/ui/button'
+import { useCallback, useEffect, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/app/store/hooks"
+import { Button } from "@/components/ui/button"
 import {
 	selectAuthBootstrapError,
 	selectAuthBootstrapStatus
-} from '@/features/auth/model/selectors'
-import {authBootstrapReset} from '@/features/auth/model/slice'
-import {bootstrapAuth} from '../model/bootstrapAuthThunk'
+} from "@/features/auth/model/selectors"
+import { authBootstrapReset } from "@/features/auth/model/slice"
+import { bootstrapAuth } from "../model/bootstrapAuthThunk"
 
 let authBootstrapPromise: Promise<void> | null = null
 
@@ -15,7 +15,7 @@ interface AuthInitProps {
 }
 
 export function AuthInit(props: AuthInitProps) {
-	const {children} = props
+	const { children } = props
 
 	const dispatch = useAppDispatch()
 
@@ -46,17 +46,17 @@ export function AuthInit(props: AuthInitProps) {
 		setRetryKey(k => k + 1)
 	}
 
-	if (status === 'ready') {
+	if (status === "ready") {
 		return <>{children}</>
 	}
 
-	if (status === 'error') {
+	if (status === "error") {
 		return (
-			<div className='flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4'>
-				<p className='max-w-md text-center text-destructive text-sm'>
-					{errorMessage ?? 'Ошибка при старте приложения'}
+			<div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4">
+				<p className="max-w-md text-center text-destructive text-sm">
+					{errorMessage ?? "Ошибка при старте приложения"}
 				</p>
-				<Button onClick={handleRetry} type='button' variant='outline'>
+				<Button onClick={handleRetry} type="button" variant="outline">
 					Повторить
 				</Button>
 			</div>
@@ -64,10 +64,10 @@ export function AuthInit(props: AuthInitProps) {
 	}
 
 	return (
-		<div className='flex min-h-screen items-center justify-center bg-background'>
+		<div className="flex min-h-screen items-center justify-center bg-background">
 			<div
-				aria-label='Загрузка'
-				className='size-8 animate-spin rounded-full border-2 border-muted border-t-primary'
+				aria-label="Загрузка"
+				className="size-8 animate-spin rounded-full border-2 border-muted border-t-primary"
 			/>
 		</div>
 	)

@@ -1,5 +1,5 @@
-import {createSelector} from '@reduxjs/toolkit'
-import type {RootState} from '@/app/store'
+import { createSelector } from "@reduxjs/toolkit"
+import type { RootState } from "@/app/store"
 
 export const selectChatSidebar = (state: RootState) => state.chatSidebar
 
@@ -46,8 +46,7 @@ export const selectFilteredChats = createSelector(
 		const contentOnlyMatched: FilteredChat[] = sidebar.chats
 			.filter(
 				chat =>
-					!titleMatchedIds.has(chat.id) &&
-					chat.id in sidebar.contentMatches
+					!titleMatchedIds.has(chat.id) && chat.id in sidebar.contentMatches
 			)
 			.map(chat => ({
 				...chat,

@@ -1,4 +1,4 @@
-import type {DBSchema, IDBPDatabase, IDBPTransaction, StoreNames} from 'idb'
+import type { DBSchema, IDBPDatabase, IDBPTransaction, StoreNames } from "idb"
 
 /**
  * Несколько операций в одной транзакции. После колбэка дожидаемся `tx.done`.
@@ -6,7 +6,7 @@ import type {DBSchema, IDBPDatabase, IDBPTransaction, StoreNames} from 'idb'
 export async function runIndexedDbTransaction<
 	Schema extends DBSchema,
 	Names extends StoreNames<Schema>[],
-	Mode extends IDBTransactionMode = 'readwrite'
+	Mode extends IDBTransactionMode = "readwrite"
 >(
 	database: IDBPDatabase<Schema>,
 	storeNames: Names,

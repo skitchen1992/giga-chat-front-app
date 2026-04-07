@@ -4,14 +4,14 @@ import {
 	type IDBPDatabase,
 	type OpenDBCallbacks,
 	openDB
-} from 'idb'
+} from "idb"
 
 export type CreateIndexedDbConnectionOptions<Schema extends DBSchema> = {
 	name: string
 	version: number
 } & Pick<
 	OpenDBCallbacks<Schema>,
-	'upgrade' | 'blocked' | 'blocking' | 'terminated'
+	"upgrade" | "blocked" | "blocking" | "terminated"
 >
 
 function buildOpenDbCallbacks<Schema extends DBSchema>(

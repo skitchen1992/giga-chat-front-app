@@ -1,4 +1,4 @@
-import {createAsyncThunk} from '@reduxjs/toolkit'
+import { createAsyncThunk } from "@reduxjs/toolkit"
 import {
 	deleteChatFromIndexedDb,
 	deleteMessagesByChatId,
@@ -6,15 +6,15 @@ import {
 	putChatInIndexedDb,
 	searchMessageContent,
 	updateChatTitleInIndexedDb
-} from '@/shared/lib'
+} from "@/shared/lib"
 
 const CHAT_LIST_TITLE_MAX = 48
 
 function chatTitleFromFirstMessage(text: string): string {
-	const line = text.replace(/\s+/gu, ' ').trim()
+	const line = text.replace(/\s+/gu, " ").trim()
 
 	if (!line) {
-		return 'Новый чат'
+		return "Новый чат"
 	}
 
 	return line.length <= CHAT_LIST_TITLE_MAX
@@ -22,12 +22,12 @@ function chatTitleFromFirstMessage(text: string): string {
 		: `${line.slice(0, CHAT_LIST_TITLE_MAX - 1)}…`
 }
 
-function recordToListItem(r: {id: string; title: string}) {
-	return {id: r.id, title: r.title}
+function recordToListItem(r: { id: string; title: string }) {
+	return { id: r.id, title: r.title }
 }
 
 export const hydrateChatsFromIndexedDb = createAsyncThunk(
-	'chatSidebar/hydrateChats',
+	"chatSidebar/hydrateChats",
 	async () => {
 		let rows = await getAllChatsFromIndexedDb()
 
@@ -39,34 +39,34 @@ export const hydrateChatsFromIndexedDb = createAsyncThunk(
 )
 
 export const createNewChatThunk = createAsyncThunk(
-	'chatSidebar/createNewChat',
-	async (payload?: {firstUserMessage?: string}) => {
+	"chatSidebar/createNewChat",
+	async (payload?: { firstUserMessage?: string }) => {
 		const id = crypto.randomUUID()
 
 		const title = payload?.firstUserMessage
 			? chatTitleFromFirstMessage(payload.firstUserMessage)
-			: 'Новый чат'
+			: "Новый чат"
 		const updatedAt = Date.now()
 
-		await putChatInIndexedDb({id, title, updatedAt})
-		return {id, title}
+		await putChatInIndexedDb({ id, title, updatedAt })
+		return { id, title }
 	}
 )
 
 export const renameChatThunk = createAsyncThunk(
-	'chatSidebar/renameChat',
-	async (payload: {id: string; title: string}) => {
-		const trimmed = payload.title.trim() || 'Новый чат'
+	"chatSidebar/renameChat",
+	async (payload: { id: string; title: string }) => {
+		const trimmed = payload.title.trim() || "Новый чат"
 		await updateChatTitleInIndexedDb(payload.id, trimmed)
-		return {id: payload.id, title: trimmed}
+		return { id: payload.id, title: trimmed }
 	}
 )
 
 export const searchMessagesContentThunk = createAsyncThunk(
-	'chatSidebar/searchMessagesContent',
+	"chatSidebar/searchMessagesContent",
 	async (query: string) => {
 		const results = await searchMessageContent(query)
-		
+
 		return results.reduce<Record<string, string>>((acc, r) => {
 			acc[r.chatId] = r.snippet
 			return acc
@@ -75,7 +75,7 @@ export const searchMessagesContentThunk = createAsyncThunk(
 )
 
 export const deleteChatThunk = createAsyncThunk(
-	'chatSidebar/deleteChat',
+	"chatSidebar/deleteChat",
 	async (chatId: string) => {
 		await deleteMessagesByChatId(chatId)
 		await deleteChatFromIndexedDb(chatId)

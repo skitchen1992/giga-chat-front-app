@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'gigachat-auth-session'
+const STORAGE_KEY = "gigachat-auth-session"
 
 export interface PersistedAuthSession {
 	accessToken: string
@@ -21,7 +21,7 @@ export function isAccessTokenExpired(
 }
 
 export function readPersistedAuthSession(): PersistedAuthSession | null {
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		return null
 	}
 	try {
@@ -31,8 +31,8 @@ export function readPersistedAuthSession(): PersistedAuthSession | null {
 		}
 		const parsed = JSON.parse(raw) as PersistedAuthSession
 		if (
-			typeof parsed.accessToken !== 'string' ||
-			typeof parsed.tokenExpiresAtMs !== 'number'
+			typeof parsed.accessToken !== "string" ||
+			typeof parsed.tokenExpiresAtMs !== "number"
 		) {
 			return null
 		}
@@ -43,14 +43,14 @@ export function readPersistedAuthSession(): PersistedAuthSession | null {
 }
 
 export function persistAuthSession(session: PersistedAuthSession): void {
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		return
 	}
 	localStorage.setItem(STORAGE_KEY, JSON.stringify(session))
 }
 
 export function clearPersistedAuthSession(): void {
-	if (typeof window === 'undefined') {
+	if (typeof window === "undefined") {
 		return
 	}
 	localStorage.removeItem(STORAGE_KEY)

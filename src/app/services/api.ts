@@ -1,17 +1,17 @@
 import {
 	oauthExpiresAtToMs,
 	persistAuthSession
-} from '@/features/auth/lib/persistedAuthSession'
-import {setAuthSession} from '@/features/auth/model/slice'
-import {setModelList} from '@/features/settings/model/slice'
-import {api} from '@/shared/api'
+} from "@/features/auth/lib/persistedAuthSession"
+import { setAuthSession } from "@/features/auth/model/slice"
+import { setModelList } from "@/features/settings/model/slice"
+import { api } from "@/shared/api"
 
 api.enhanceEndpoints({
 	endpoints: {
 		getAuthToken: {
-			async onQueryStarted(_arg, {queryFulfilled, dispatch}) {
+			async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
 				try {
-					const {data} = await queryFulfilled
+					const { data } = await queryFulfilled
 
 					const tokenExpiresAtMs = oauthExpiresAtToMs(data.expires_at)
 
@@ -25,9 +25,9 @@ api.enhanceEndpoints({
 			}
 		},
 		getModels: {
-			async onQueryStarted(_arg, {queryFulfilled, dispatch}) {
+			async onQueryStarted(_arg, { queryFulfilled, dispatch }) {
 				try {
-					const {data} = await queryFulfilled
+					const { data } = await queryFulfilled
 					dispatch(setModelList(data.data))
 				} catch {}
 			}
@@ -35,4 +35,4 @@ api.enhanceEndpoints({
 	}
 })
 
-export {api}
+export { api }

@@ -1,7 +1,7 @@
-import {createSlice} from '@reduxjs/toolkit'
-import {api} from '@/shared/api'
+import { createSlice } from "@reduxjs/toolkit"
+import { api } from "@/shared/api"
 
-export type AssistantResponseStatus = 'idle' | 'loading' | 'success' | 'error'
+export type AssistantResponseStatus = "idle" | "loading" | "success" | "error"
 
 export interface AssistantResponseState {
 	text: string | null
@@ -11,45 +11,45 @@ export interface AssistantResponseState {
 
 const initialState: AssistantResponseState = {
 	text: null,
-	status: 'idle',
+	status: "idle",
 	error: null
 }
 
 export const assistantResponseSlice = createSlice({
-	name: 'assistantResponse',
+	name: "assistantResponse",
 	initialState,
 	reducers: {
 		clearAssistantResponse: state => {
 			state.text = null
-			state.status = 'idle'
+			state.status = "idle"
 			state.error = null
 		}
 	},
 	extraReducers: builder => {
 		builder
 			.addMatcher(api.endpoints.getCompletions.matchPending, state => {
-				state.status = 'loading'
+				state.status = "loading"
 				state.error = null
 			})
 			.addMatcher(
 				api.endpoints.getCompletions.matchFulfilled,
 				(state, action) => {
-					state.status = 'success'
+					state.status = "success"
 					const raw = action.payload.choices?.[0]?.message?.content
-					state.text = typeof raw === 'string' ? raw : null
+					state.text = typeof raw === "string" ? raw : null
 				}
 			)
 			.addMatcher(
 				api.endpoints.getCompletions.matchRejected,
 				(state, action) => {
-					state.status = 'error'
+					state.status = "error"
 					state.error =
-						action.error?.message?.trim() || 'Не удалось получить ответ'
+						action.error?.message?.trim() || "Не удалось получить ответ"
 				}
 			)
 	}
 })
 
-export const {clearAssistantResponse} = assistantResponseSlice.actions
+export const { clearAssistantResponse } = assistantResponseSlice.actions
 
 export default assistantResponseSlice.reducer

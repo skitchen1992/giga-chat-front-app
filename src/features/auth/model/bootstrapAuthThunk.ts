@@ -1,27 +1,27 @@
-import type {AppDispatch} from '@/app/store'
+import type { AppDispatch } from "@/app/store"
 import {
 	clearPersistedAuthSession,
 	isAccessTokenExpired,
 	readPersistedAuthSession
-} from '@/features/auth/lib/persistedAuthSession'
-import {api} from '@/shared/api'
+} from "@/features/auth/lib/persistedAuthSession"
+import { api } from "@/shared/api"
 import {
 	authBootstrapFailed,
 	authBootstrapStarted,
 	authBootstrapSucceeded,
 	clearAuthSession,
 	setAuthSession
-} from './slice'
+} from "./slice"
 
 function getErrorMessage(error: unknown): string {
-	if (error && typeof error === 'object' && 'data' in error) {
-		const data = (error as {data?: unknown}).data
-		if (typeof data === 'string') {
+	if (error && typeof error === "object" && "data" in error) {
+		const data = (error as { data?: unknown }).data
+		if (typeof data === "string") {
 			return data
 		}
-		if (data && typeof data === 'object' && 'message' in data) {
-			const msg = (data as {message?: unknown}).message
-			if (typeof msg === 'string') {
+		if (data && typeof data === "object" && "message" in data) {
+			const msg = (data as { message?: unknown }).message
+			if (typeof msg === "string") {
 				return msg
 			}
 		}
@@ -29,15 +29,15 @@ function getErrorMessage(error: unknown): string {
 	if (error instanceof Error) {
 		return error.message
 	}
-	return 'Не удалось получить токен авторизации'
+	return "Не удалось получить токен авторизации"
 }
 
 function isUnauthorizedError(error: unknown): boolean {
 	return (
 		error !== null &&
-		typeof error === 'object' &&
-		'status' in error &&
-		(error as {status: unknown}).status === 401
+		typeof error === "object" &&
+		"status" in error &&
+		(error as { status: unknown }).status === 401
 	)
 }
 
@@ -59,7 +59,7 @@ export function bootstrapAuth() {
 
 			try {
 				await dispatch(
-					api.endpoints.getModels.initiate(undefined, {forceRefetch: true})
+					api.endpoints.getModels.initiate(undefined, { forceRefetch: true })
 				).unwrap()
 			} catch (firstModelsError) {
 				if (!isUnauthorizedError(firstModelsError)) {
@@ -69,7 +69,7 @@ export function bootstrapAuth() {
 				clearPersistedAuthSession()
 				await dispatch(api.endpoints.getAuthToken.initiate()).unwrap()
 				await dispatch(
-					api.endpoints.getModels.initiate(undefined, {forceRefetch: true})
+					api.endpoints.getModels.initiate(undefined, { forceRefetch: true })
 				).unwrap()
 			}
 			dispatch(authBootstrapSucceeded())

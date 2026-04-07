@@ -23,9 +23,9 @@
 	"javascript": {
 		"formatter": {
 			"arrowParentheses": "asNeeded",
-			"bracketSpacing": false,
-			"jsxQuoteStyle": "single",
-			"quoteStyle": "single",
+			"bracketSpacing": true,
+			"jsxQuoteStyle": "double",
+			"quoteStyle": "double",
 			"semicolons": "asNeeded",
 			"trailingCommas": "none"
 		}

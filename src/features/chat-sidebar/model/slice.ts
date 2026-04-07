@@ -1,12 +1,12 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
+import type { PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 import {
 	createNewChatThunk,
 	deleteChatThunk,
 	hydrateChatsFromIndexedDb,
 	renameChatThunk,
 	searchMessagesContentThunk
-} from './thunks'
+} from "./thunks"
 
 export interface ChatListItem {
 	id: string
@@ -23,14 +23,14 @@ export interface ChatSidebarState {
 
 const initialState: ChatSidebarState = {
 	chats: [],
-	searchQuery: '',
+	searchQuery: "",
 	activeChatId: null,
 	chatsHydrated: false,
 	contentMatches: {}
 }
 
 export const chatSidebarSlice = createSlice({
-	name: 'chatSidebar',
+	name: "chatSidebar",
 	initialState,
 	reducers: {
 		setSearchQuery: (state, action: PayloadAction<string>) => {
@@ -50,13 +50,13 @@ export const chatSidebarSlice = createSlice({
 				state.chatsHydrated = true
 			})
 			.addCase(createNewChatThunk.fulfilled, (state, action) => {
-				const {id, title} = action.payload
+				const { id, title } = action.payload
 
-				state.chats.unshift({id, title})
+				state.chats.unshift({ id, title })
 				state.activeChatId = id
 			})
 			.addCase(renameChatThunk.fulfilled, (state, action) => {
-				const {id, title} = action.payload
+				const { id, title } = action.payload
 
 				const chat = state.chats.find(c => c.id === id)
 				if (chat) {
@@ -78,6 +78,6 @@ export const chatSidebarSlice = createSlice({
 	}
 })
 
-export const {setSearchQuery, setActiveChatId} = chatSidebarSlice.actions
+export const { setSearchQuery, setActiveChatId } = chatSidebarSlice.actions
 
 export const chatSidebarReducer = chatSidebarSlice.reducer

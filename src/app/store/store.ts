@@ -1,11 +1,11 @@
-import {configureStore} from '@reduxjs/toolkit'
-import {api} from '@/app/services/api'
-import assistantResponseSlice from '@/features/assistant-response/model/slice'
-import authSlice from '@/features/auth/model/slice'
-import chatHistoryReducer from '@/features/chat-history/model/slice'
-import {chatSidebarReducer} from '@/features/chat-sidebar/model/slice'
-import sendMessageSlice from '@/features/send-message/model/slice'
-import settingsSlice from '@/features/settings/model/slice'
+import { configureStore } from "@reduxjs/toolkit"
+import { api } from "@/app/services/api"
+import assistantResponseSlice from "@/features/assistant-response/model/slice"
+import authSlice from "@/features/auth/model/slice"
+import chatHistoryReducer from "@/features/chat-history/model/slice"
+import { chatSidebarReducer } from "@/features/chat-sidebar/model/slice"
+import sendMessageSlice from "@/features/send-message/model/slice"
+import settingsSlice from "@/features/settings/model/slice"
 
 export const store = configureStore({
 	reducer: {

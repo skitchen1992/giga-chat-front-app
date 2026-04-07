@@ -6,7 +6,7 @@ import type {
 	StoreKey,
 	StoreNames,
 	StoreValue
-} from 'idb'
+} from "idb"
 
 export function bindObjectStoreCrud<
 	Schema extends DBSchema,

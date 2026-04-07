@@ -1,21 +1,21 @@
 /// <reference types="vitest/config" />
 
-import path from 'node:path'
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react'
-import {defineConfig} from 'vite'
+import path from "node:path"
+import tailwindcss from "@tailwindcss/vite"
+import react from "@vitejs/plugin-react"
+import { defineConfig } from "vite"
 
 export default defineConfig(() => ({
 	plugins: [react(), tailwindcss()],
 	server: {
 		proxy: {
-			'/api/v2/oauth': {
-				target: 'https://ngw.devices.sberbank.ru:9443',
+			"/api/v2/oauth": {
+				target: "https://ngw.devices.sberbank.ru:9443",
 				changeOrigin: true,
 				secure: false
 			},
-			'/api/v1': {
-				target: 'https://gigachat.devices.sberbank.ru',
+			"/api/v1": {
+				target: "https://gigachat.devices.sberbank.ru",
 				changeOrigin: true,
 				secure: false
 			}
@@ -23,13 +23,13 @@ export default defineConfig(() => ({
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve(import.meta.dirname, './src'),
-			'@/app': path.resolve(import.meta.dirname, './src/app'),
-			'@/pages': path.resolve(import.meta.dirname, './src/pages'),
-			'@/widgets': path.resolve(import.meta.dirname, './src/widgets'),
-			'@/features': path.resolve(import.meta.dirname, './src/features'),
-			'@/entities': path.resolve(import.meta.dirname, './src/entities'),
-			'@/shared': path.resolve(import.meta.dirname, './src/shared')
+			"@": path.resolve(import.meta.dirname, "./src"),
+			"@/app": path.resolve(import.meta.dirname, "./src/app"),
+			"@/pages": path.resolve(import.meta.dirname, "./src/pages"),
+			"@/widgets": path.resolve(import.meta.dirname, "./src/widgets"),
+			"@/features": path.resolve(import.meta.dirname, "./src/features"),
+			"@/entities": path.resolve(import.meta.dirname, "./src/entities"),
+			"@/shared": path.resolve(import.meta.dirname, "./src/shared")
 		}
 	},
 	test: {
@@ -37,18 +37,18 @@ export default defineConfig(() => ({
 		clearMocks: true,
 		coverage: {
 			enabled: true,
-			exclude: ['src/app/main.tsx'],
-			include: ['src/**/*'],
-			reporter: ['text', 'lcov'],
-			reportsDirectory: 'coverage',
+			exclude: ["src/app/main.tsx"],
+			include: ["src/**/*"],
+			reporter: ["text", "lcov"],
+			reportsDirectory: "coverage",
 			thresholds: {
-				'100': true
+				"100": true
 			}
 		},
 		css: false,
-		environment: 'happy-dom',
+		environment: "happy-dom",
 		globals: true,
-		include: ['src/**/*.test.ts?(x)'],
+		include: ["src/**/*.test.ts?(x)"],
 		setupFiles: []
 	}
 }))

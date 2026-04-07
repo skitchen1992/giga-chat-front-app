@@ -1,5 +1,5 @@
-import type {PayloadAction} from '@reduxjs/toolkit'
-import {createSlice} from '@reduxjs/toolkit'
+import type { PayloadAction } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit"
 
 export interface AttachmentMeta {
 	id: string
@@ -13,19 +13,19 @@ export interface SendMessageState {
 }
 
 const initialState: SendMessageState = {
-	message: '',
+	message: "",
 	attachments: []
 }
 
 export const sendMessageSlice = createSlice({
-	name: 'sendMessage',
+	name: "sendMessage",
 	initialState,
 	reducers: {
 		setMessage: (state, action: PayloadAction<string>) => {
 			state.message = action.payload
 		},
 		resetMessage: state => {
-			state.message = ''
+			state.message = ""
 		},
 		sendMessage: (_state, _action: PayloadAction<string>) => {},
 		addAttachment: (state, action: PayloadAction<AttachmentMeta>) => {

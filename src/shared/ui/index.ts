@@ -1,2 +1,2 @@
 // Public API для shared/ui
-export { ErrorFallback, makeErrorFallback } from "./ErrorFallback";
+export { ErrorFallback, makeErrorFallback } from "./ErrorFallback"

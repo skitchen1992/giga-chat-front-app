@@ -4,10 +4,10 @@ export type {
 	CompletionsResponse,
 	Model,
 	ModelResponse
-} from './baseApi'
+} from "./baseApi"
 export {
 	api,
 	useGetAuthTokenMutation,
 	useGetCompletionsMutation,
 	useGetModelsQuery
-} from './baseApi'
+} from "./baseApi"
