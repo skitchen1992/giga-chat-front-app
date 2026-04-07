@@ -14,6 +14,7 @@ import {
   setActiveChatId,
 } from "@/features/chat-sidebar";
 import ChatInput from "@/features/send-message/ui/ChatInput/ChatInput";
+import { ModelSettingsPanel } from "@/features/settings";
 
 export function App() {
   const dispatch = useAppDispatch();
@@ -59,11 +60,14 @@ export function App() {
           <span className="font-medium text-sm">ChatGPT Auto</span>
           <ChevronDown className="size-4 text-muted-foreground" />
         </div>
-        <button
-          aria-label="Профиль"
-          className="size-8 rounded-full border border-border"
-          type="button"
-        />
+        <div className="flex items-center gap-1">
+          <ModelSettingsPanel />
+          <button
+            aria-label="Профиль"
+            className="size-8 rounded-full border border-border"
+            type="button"
+          />
+        </div>
       </header>
 
       <ChatSidebar />

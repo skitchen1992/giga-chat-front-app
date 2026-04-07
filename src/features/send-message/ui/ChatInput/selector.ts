@@ -1,13 +1,15 @@
-import {createSelector} from '@reduxjs/toolkit'
+import { createSelector } from "@reduxjs/toolkit";
+import { selectRequestParams } from "@/features/settings";
 import {
-	selectAttachmentsSelector,
-	selectMessageSelector
-} from '../../model/selectors'
+  selectAttachmentsSelector,
+  selectMessageSelector,
+} from "../../model/selectors";
 
 export default createSelector(
-	[selectMessageSelector, selectAttachmentsSelector],
-	(message, attachments) => ({
-		message,
-		attachments
-	})
-)
+  [selectMessageSelector, selectAttachmentsSelector, selectRequestParams],
+  (message, attachments, requestParams) => ({
+    message,
+    attachments,
+    requestParams,
+  })
+);

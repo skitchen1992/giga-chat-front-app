@@ -27,7 +27,7 @@ import selector from "./selector";
 
 function ChatInput() {
   const [getCompletions, { isLoading }] = useGetCompletionsMutation();
-  const { message, attachments } = useAppSelector(selector);
+  const { message, attachments, requestParams } = useAppSelector(selector);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { chatId } = useParams();
@@ -115,7 +115,7 @@ function ChatInput() {
         content: m.content,
       }));
 
-      const request = getCompletions({ messages });
+      const request = getCompletions({ messages, ...requestParams });
       pendingRequestRef.current = request;
 
       try {
@@ -140,7 +140,7 @@ function ChatInput() {
         pendingRequestRef.current = null;
       }
     } else {
-      getCompletions({ messages: [userMessage] });
+      getCompletions({ messages: [userMessage], ...requestParams });
     }
 
     dispatch(resetMessage());
