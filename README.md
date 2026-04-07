@@ -1,3 +1,25 @@
+## Для запуска
+
+1. Скопируй `.env.example` в `.env`:
+
+```bash
+cp .env.example .env
+```
+
+2. Заполни переменные в `.env`:
+
+```env
+VITE_GIGA_CHAT_AUTHORIZATION_KEY=  # Ключ авторизации GigaChat API
+VITE_GIGA_OAUTH_SCOPE=GIGACHAT_API_PERS  # Scope для OAuth (по умолчанию GIGACHAT_API_PERS)
+```
+
+3. Установи зависимости и запусти dev-сервер:
+
+```bash
+pnpm install
+pnpm dev
+```
+
 ## Features
 
 - [Vite 6](https://vitejs.dev) с [React 19](https://reactjs.org), [TypeScript 5](https://www.typescriptlang.org) и [absolute imports](https://github.com/aleclarson/vite-tsconfig-paths).
